@@ -12,13 +12,21 @@ export function MediaLibraryPage() {
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    const uploadUrl = await generateUploadUrl()
-    await fetch(uploadUrl, {
-      method: "PUT",
-      headers: { "Content-Type": file.type },
-      body: file,
-    })
-    e.target.value = ""
+    try {
+      const uploadUrl = await generateUploadUrl()
+      const response = await fetch(uploadUrl, {
+        method: "PUT",
+        headers: { "Content-Type": file.type },
+        body: file,
+      })
+      if (!response.ok) {
+        throw new Error(`Upload failed: ${response.statusText}`)
+      }
+    } catch (error) {
+      console.error("Upload error:", error)
+    } finally {
+      e.target.value = ""
+    }
   }
 
   const handleDelete = async (storageId: Id<"_storage">) => {

@@ -1,10 +1,13 @@
 import { v } from "convex/values"
 import { mutation, query } from "./_generated/server"
+import { getAuthUserId } from "@convex-dev/auth/server"
 
 // Generate a short-lived upload URL for the client to PUT a file directly to Convex Storage
 export const generateUploadUrl = mutation({
   args: {},
   handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx)
+    if (!userId) throw new Error("Unauthorized")
     return await ctx.storage.generateUploadUrl()
   },
 })
@@ -29,6 +32,8 @@ export const getMetadata = query({
 export const deleteFile = mutation({
   args: { storageId: v.id("_storage") },
   handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx)
+    if (!userId) throw new Error("Unauthorized")
     await ctx.storage.delete(args.storageId)
   },
 })
@@ -37,6 +42,8 @@ export const deleteFile = mutation({
 export const listFiles = query({
   args: {},
   handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx)
+    if (!userId) throw new Error("Unauthorized")
     return await ctx.db.system.query("_storage").order("desc").take(200)
   },
 })

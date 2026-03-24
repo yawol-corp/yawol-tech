@@ -146,6 +146,15 @@ interface TipTapEditorProps {
 }
 
 export function TipTapEditor({ content, onChange, placeholder = "Start writing..." }: TipTapEditorProps) {
+  const initialContent = (() => {
+    if (!content) return ""
+    try {
+      return JSON.parse(content)
+    } catch {
+      return content // treat as HTML or plain text
+    }
+  })()
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -155,7 +164,7 @@ export function TipTapEditor({ content, onChange, placeholder = "Start writing..
       Link.configure({ openOnClick: false }),
       Placeholder.configure({ placeholder }),
     ],
-    content,
+    content: initialContent,
     onUpdate: ({ editor }) => {
       onChange(JSON.stringify(editor.getJSON()))
     },

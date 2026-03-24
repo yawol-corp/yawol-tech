@@ -71,17 +71,19 @@ function Sidebar() {
 
       {/* Footer Links */}
       <div className="border-t border-border p-3 space-y-0.5">
+        {import.meta.env.DEV && (
+          <a
+            href={import.meta.env.VITE_SITE_URL ?? "http://localhost:5173"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-all"
+          >
+            <ArrowSquareOut size={18} />
+            View Site
+          </a>
+        )}
         <a
-          href="http://localhost:5173"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-all"
-        >
-          <ArrowSquareOut size={18} />
-          View Site
-        </a>
-        <a
-          href="https://dashboard.convex.dev/d/modest-mongoose-0"
+          href={import.meta.env.VITE_CONVEX_DASHBOARD_URL ?? "https://dashboard.convex.dev"}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-all"
